@@ -10,7 +10,7 @@ async function registerCommands() {
                 .setDescription("123")
                 .addStringOption(opt => opt
                         .setName("lifetime")
-                        .setDescription("456")
+                        .setDescription("время жизни приглашения")
                         .setRequired(true)
                         .addChoices(
                             { name: '1 час', value: '3600' },
@@ -19,7 +19,22 @@ async function registerCommands() {
                             { name: '7 дней', value: '604800' },
                             { name: 'Бесконечно', value: '0' },
                         )
+                        
                 )
+                .addStringOption(opt => opt
+                        .setName("uses")
+                        .setDescription("колличество использований")
+                        .setRequired(false)
+                        .addChoices(
+                            { name: 'без ограничений', value: '0' },
+                            { name: '1', value: '1' },
+                            { name: '5', value: '5' },
+                            { name: '50', value: '50' },
+                            { name: '100', value: '100' },
+                        )
+                        
+                )
+                
 
         )
     ]

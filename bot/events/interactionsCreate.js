@@ -1,13 +1,10 @@
-import hanlderCreateInvite from "../commands/createInvites.js"
+import { hanlderCreateInvite } from "../commands/invite/inviteCreate.js"
 
-async function interactionCommands(interaction) {
+export async function interactionCommands(interaction) {
     switch (interaction.options.getSubcommand()) {
         case 'create':
             let lifetime = parseInt(interaction.options.getString('lifetime'))
             console.log(lifetime)
             hanlderCreateInvite(interaction, lifetime)
-            
     }
 }
-
-export default interactionCommands

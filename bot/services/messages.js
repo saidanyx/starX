@@ -11,16 +11,15 @@ export function returnDefaultMessages() {
     }
 }
 
-export function initCurrentMessages(messagesObject) {
-    for (const message of messagesObject) {
+let oldMessages = returnDefaultMessages()
 
-        messages[message.title] = (params = {}) => {
-            return message.description.replace(/\{(\w+)\}/g, (_, key) => {
-                return params[key] ?? "";
-            });
-        };
+export function createCurrentMessages() {
+    console.log("работает")
+    for (let mess in oldMessages) {
+        messages[mess] = function (...args) {
+            let i = 0
+            return oldMessages[mess].replace(/\{(\w+)\}/g, () => args[i++] || '')
+        }
     }
-
     console.log(messages)
-    console.log("🟩 Сообщения зарегистрированы");
 }
