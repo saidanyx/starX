@@ -7,7 +7,8 @@ async function registerCommands() {
         .setDescription("create invite")
         .addSubcommand(sub => sub
                 .setName("create")
-                .setDescription("123")
+                .setDescription("settings")
+
                 .addStringOption(opt => opt
                         .setName("lifetime")
                         .setDescription("время жизни приглашения")
@@ -21,22 +22,23 @@ async function registerCommands() {
                         )
                         
                 )
-                .addStringOption(opt => opt
-                        .setName("uses")
-                        .setDescription("колличество использований")
-                        .setRequired(false)
-                        .addChoices(
-                            { name: 'без ограничений', value: '0' },
-                            { name: '1', value: '1' },
-                            { name: '5', value: '5' },
-                            { name: '50', value: '50' },
-                            { name: '100', value: '100' },
-                        )
-                        
+
+                .addIntegerOption(opt => opt
+                    .setName("uses")
+                    .setDescription("количество использований || 0 - без ограничений")
+                    .setMinValue(0)
+                    .setMaxValue(100)
+                    .setRequired(false)
                 )
+
                 
 
-        )
+        ),
+
+        new SlashCommandBuilder()
+            .setName("setup")
+            .setDescription("settings")
+
     ]
 
     const rest = new REST({version: 10}).setToken(process.env.token)

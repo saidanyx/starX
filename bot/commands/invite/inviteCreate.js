@@ -1,25 +1,25 @@
 import { getDB, sendInvite } from "../../services/database.js"
 import { messages } from "../../services/messages.js"
 
-export async function hanlderCreateInvite(interaction, lifetime) {
+export async function hanlderCreateInvite(interaction, lifetime, uses) {
     let db = getDB()
 
-    let invite = await createDiscordInvite(interaction, lifetime)
-    sendInviteToDB(db, interaction, invite, lifetime)
+    let invite = await createDiscordInvite(interaction, lifetime, uses)
+    sendInviteToDB(db, interaction, invite, uses, lifetime)
     await replyWithInvite(interaction, invite)
 }
 
-async function createDiscordInvite(interaction, lifetime) {
+async function createDiscordInvite(interaction, lifetime, uses) {
     return await interaction.channel.createInvite ({
         maxAge: lifetime,
-        maxUses: 0,
+        maxUses: uses,
         unique: true,
         reason: `Создано пользователем ${interaction.user.tag}`,
     })
 }
 
-function sendInviteToDB(db, interaction, invite, lifetime) {
-    sendInvite(db, interaction.guildId, invite.code, interaction.user.id, 3, lifetime)
+function sendInviteToDB(db, interaction, invite, uses, lifetime) {
+    sendInvite({ db: db, guildId: interaction.guildId, code: invite.code, ownerId: interaction.user.id, maxUses: uses, lifetime: lifetime, expiresAt: invite.expiresAt })
 }
 
 async function replyWithInvite(interaction, invite) {

@@ -20,7 +20,7 @@ export function getDB() {
     return db
 }
 
-export async function sendInvite(db, guildId, code, ownerId, maxUses, lifetime) {
+export async function sendInvite({ db, guildId, code, ownerId, maxUses, lifetime, expiresAt }) {
     return await db.collection('invites').insertOne({
         guildId: guildId,
         code: code,
@@ -32,7 +32,8 @@ export async function sendInvite(db, guildId, code, ownerId, maxUses, lifetime) 
         uniqueUsers: 0, 
 
         maxUses: maxUses,
-        expiresAt: lifetime,
+        lifetime: lifetime,
+        expiresAt: expiresAt,
 
         deleted: false,
     })
@@ -50,6 +51,21 @@ export async function contributeDefaultMessages(db, messages) {
 }
 
 export async function getCurrentMessages(db) {
-    let docs = await db.collection('messages').find({}).toArray()
-    return docs
+    return await db.collection('messages').find({}).toArray()
+}
+
+export async function insertInfoAboutGuild({ db, inviteIimitPerUser, guildId, adminRole, locale, logsChannel }) {
+    if (await db.collection('guilds').findOne({ guildId })) return
+
+    return await db.collection('guilds').insertOne({
+        inviteIimitPerUser: inviteIimitPerUser,
+        guildId: guildId,
+        adminRole: adminRole,
+        locale: locale,
+        logsChannel: logsChannel,
+    })
+}
+
+export async function findInfoAboutGuild(db, guildId) {
+    return await db.collection('guilds').find({ guildId: guildId }).toArray()
 }

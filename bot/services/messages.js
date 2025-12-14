@@ -14,12 +14,10 @@ export function returnDefaultMessages() {
 let oldMessages = returnDefaultMessages()
 
 export function createCurrentMessages() {
-    console.log("работает")
     for (let mess in oldMessages) {
         messages[mess] = function (...args) {
             let i = 0
             return oldMessages[mess].replace(/\{(\w+)\}/g, () => args[i++] || '')
         }
     }
-    console.log(messages)
 }
